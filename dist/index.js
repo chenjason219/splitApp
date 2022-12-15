@@ -16,25 +16,46 @@ evenSplit === null || evenSplit === void 0 ? void 0 : evenSplit.addEventListener
 const personInput = document.querySelector('#personInput');
 const people = document.querySelector('.people');
 const deleteBtn = document.querySelector('delete');
-const itemInput = () => {
-};
-function removePerson() {
+function removeParent() {
     this.parentElement.remove();
 }
 const addPerson = () => {
     const createPerson = document.createElement('div');
-    const personName = document.querySelector('#personName');
     const displayName = document.createElement('h1');
+    const newItem = document.createElement('button');
     const remove = document.createElement('button');
+    const personName = document.querySelector('#personName');
+    function itemInput() {
+        const flex = document.createElement('div');
+        flex.className = 'flex';
+        const itemName = document.createElement('input');
+        itemName.type = 'text';
+        itemName.placeholder = 'Item Name';
+        const price = document.createElement('input');
+        price.type = 'number';
+        price.placeholder = 'price';
+        const remove = document.createElement('button');
+        remove.className = 'delete';
+        remove.innerHTML = '&times';
+        remove.addEventListener('click', removeParent);
+        createPerson.append(flex);
+        flex.append(itemName);
+        flex.append(price);
+        flex.append(remove);
+    }
     if (personName.value) {
         createPerson.className = 'person';
         displayName.innerHTML = personName.value;
+        newItem.className = 'add';
+        newItem.innerHTML = 'add item';
         remove.className = 'delete';
         remove.innerHTML = '&times';
-        remove.addEventListener('click', removePerson);
-        people.appendChild(createPerson);
-        createPerson.appendChild(displayName);
-        createPerson.appendChild(remove);
+        people.append(createPerson);
+        createPerson.append(displayName);
+        createPerson.append(remove);
+        createPerson.append(newItem);
+        newItem.addEventListener('click', itemInput);
+        remove.addEventListener('click', removeParent);
     }
     else {
         alert('Please enter a name');
