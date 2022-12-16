@@ -25,23 +25,25 @@ const addPerson = () => {
     const newItem = document.createElement('button');
     const remove = document.createElement('button');
     const personName = document.querySelector('#personName');
-    function itemInput() {
-        const flex = document.createElement('div');
-        flex.className = 'flex';
+    function createItemInput() {
+        const item = document.createElement('div');
+        item.className = 'item';
         const itemName = document.createElement('input');
         itemName.type = 'text';
+        itemName.className = 'itemName';
         itemName.placeholder = 'Item Name';
         const price = document.createElement('input');
         price.type = 'number';
+        price.className = 'itemPrice';
         price.placeholder = 'price';
         const remove = document.createElement('button');
         remove.className = 'delete';
         remove.innerHTML = '&times';
         remove.addEventListener('click', removeParent);
-        createPerson.append(flex);
-        flex.append(itemName);
-        flex.append(price);
-        flex.append(remove);
+        createPerson.append(item);
+        item.append(itemName);
+        item.append(price);
+        item.append(remove);
     }
     if (personName.value) {
         createPerson.className = 'person';
@@ -54,7 +56,7 @@ const addPerson = () => {
         createPerson.append(displayName);
         createPerson.append(remove);
         createPerson.append(newItem);
-        newItem.addEventListener('click', itemInput);
+        newItem.addEventListener('click', createItemInput);
         remove.addEventListener('click', removeParent);
     }
     else {

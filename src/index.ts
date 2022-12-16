@@ -9,7 +9,7 @@ evenSplit?.addEventListener('submit', (event) => {
     event.preventDefault();
     const total = document.querySelector('#total') as HTMLFormElement;
     const people = document.querySelector('#people') as HTMLFormElement;
-    const displayResult = document.querySelector('#displayResult') as HTMLFormElement;
+    const displayResult = document.querySelector('#displayResult') as HTMLElement;
     if(total.value && people.value){
         const result = Math.round((total.value / people.value) * 100) / 100;
         displayResult.innerHTML = result.toString();
@@ -20,10 +20,10 @@ evenSplit?.addEventListener('submit', (event) => {
 
 //user enters a persons name
 const personInput = document.querySelector('#personInput') as HTMLFormElement;
-const people = document.querySelector('.people') as HTMLFormElement;
+const people = document.querySelector('.people') as HTMLElement;
 
 //selects delete buttons
-const deleteBtn = document.querySelector('delete') as HTMLFormElement;
+const deleteBtn = document.querySelector('delete') as HTMLElement;
 
 //function that removes the person
 function removeParent(this: any){
@@ -39,16 +39,18 @@ const addPerson = () => {
     const remove = document.createElement('button');
     const personName = document.querySelector('#personName') as HTMLFormElement;
 
-    function itemInput(){
-        const flex = document.createElement('div');
-        flex.className = 'flex'
+    function createItemInput(){
+        const item = document.createElement('div');
+        item.className = 'item'
     
         const itemName = document.createElement('input');
         itemName.type = 'text';
+        itemName.className = 'itemName';
         itemName.placeholder = 'Item Name';
     
         const price = document.createElement('input');
         price.type = 'number';
+        price.className = 'itemPrice';
         price.placeholder = 'price';
     
         const remove = document.createElement('button');
@@ -58,11 +60,24 @@ const addPerson = () => {
     
         remove.addEventListener('click', removeParent);
     
-        createPerson.append(flex);
-        flex.append(itemName);
-        flex.append(price);
-        flex.append(remove);
-    }    
+        createPerson.append(item);
+        item.append(itemName);
+        item.append(price);
+        item.append(remove);
+
+        // const items = document.querySelectorAll('.item');
+        //     for(const item of items){
+        //         const itemPrice = item.querySelector('.itemPrice') as HTMLFormElement;
+        //         itemPrice.addEventListener('change', () => {
+        //             console.log(itemPrice.value);
+        //         })
+        //     }
+        
+        //get a list of the input elements with class name itemPrice, 
+        //whose parent element is the div with class name item
+        //and which are located inside a div container with class name person
+        
+    }
 
     if(personName.value){
         createPerson.className = 'person';
@@ -77,9 +92,9 @@ const addPerson = () => {
         createPerson.append(remove);
         createPerson.append(newItem);
 
-        newItem.addEventListener('click', itemInput);
+        newItem.addEventListener('click', createItemInput);
         remove.addEventListener('click', removeParent);
-
+        
     } else {
         alert('Please enter a name');
     }
