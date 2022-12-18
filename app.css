@@ -1,5 +1,5 @@
 *{
-    margin-top: 0.5rem;
+    margin: 0.3rem;
     padding: 0;
     box-sizing: border-box;
 }
@@ -18,6 +18,7 @@ button{
     margin-top: 1rem;
     border: none;
     border-bottom: 2px solid black;
+    border-top: 2px solid black;
     background-color: transparent;
     font-family: 'Poppins', sans-serif;
     letter-spacing: 3px;
@@ -25,6 +26,12 @@ button{
 
 button:hover{
     cursor: pointer;
+}
+
+.person{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 form{
@@ -41,6 +48,11 @@ input{
     font-family: 'Poppins', sans-serif;
     letter-spacing: 3px;
     outline: none;
+}
+
+.displayName{
+    display: flex;
+    justify-content: center;
 }
 
 .item{

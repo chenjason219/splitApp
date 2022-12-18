@@ -26,6 +26,10 @@ function removeItem(minusElement :any){
     minusElement.parentElement.remove();
 }
 
+function removePerson(this: any){
+    this.parentElement.remove();
+}
+
 const items = document.querySelector('.items') as HTMLElement;
 
 //adds another item input row
@@ -100,30 +104,35 @@ function calculateData(){
         //appends submitted inputs to person element
         let appendPerson = (finalPrice: any) => {
         
-        //grabs people element that we append to
+        //creates element we need to append to person
         const people = document.querySelector('.people') as HTMLElement;
         const personName = document.querySelector('#personName') as HTMLInputElement;
-        const display = document.createElement('h2');
-        display.innerHTML = `${personName.value.toUpperCase()} PAYS: $${finalPrice}`;
+        const display = document.createElement('div');
+        const displayName = document.createElement('h2');
+        const deletePerson = document.createElement('button');
+        deletePerson.setAttribute('class', 'deletePerson');
+        deletePerson.innerText = 'Delete';
+        displayName.innerHTML = `${personName.value.toUpperCase()} PAYS: $${finalPrice}`;
         const person = document.createElement('div');
         const list = document.createElement('ul');
         list.setAttribute('class', 'list');
         
         person.setAttribute('class', 'person');
         display.setAttribute('class', 'displayName');
-
+        display.append(displayName);
         person.append(display);
         person.append(list);
         people.append(person);
 
-            for(let i = 0; i < itemNames.length; i++){
-                const listItem = document.createElement('li');
-                let itemName = itemNames[i];
-                let itemPrice = itemPrices[i];
+        //appends a breakdown of the total price with item name and price
+        for(let i = 0; i < itemNames.length; i++){
+            const listItem = document.createElement('li');
+            let itemName = itemNames[i];
+            let itemPrice = itemPrices[i];
                 
-                listItem.innerHTML = `${(itemName as HTMLInputElement).value}: ${(itemPrice as HTMLInputElement).value}`;
-                list.append(listItem);
-            }
+            listItem.innerHTML = `${(itemName as HTMLInputElement).value}: ${(itemPrice as HTMLInputElement).value}`;
+            list.append(listItem);
+        }
         
         const taxNtip = document.createElement('div');
         taxNtip.setAttribute('class', 'taxNtip');
@@ -139,8 +148,15 @@ function calculateData(){
         taxNtip.append(taxDisplay);
         taxNtip.append(tipDisplay);
         person.append(taxNtip);
+        person.append(deletePerson);
+
+        const removePeople = document.querySelectorAll('.deletePerson');
+        removePeople.forEach(removeButton => {
+        removeButton.addEventListener('click', removePerson);
+        })
         }
 
+    //calculations depending if tax or tip was entered
     if(tipValue === 0){
         let finalPrice = Math.round((itemTotals + (itemTotals * taxValue)) * 100) / 100;
         appendPerson(finalPrice);

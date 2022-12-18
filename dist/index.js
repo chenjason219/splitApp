@@ -17,6 +17,9 @@ const personInput = document.querySelector('.personInput');
 function removeItem(minusElement) {
     minusElement.parentElement.remove();
 }
+function removePerson() {
+    this.parentElement.remove();
+}
 const items = document.querySelector('.items');
 function addItem() {
     const item = document.createElement('div');
@@ -71,13 +74,18 @@ function calculateData() {
     let appendPerson = (finalPrice) => {
         const people = document.querySelector('.people');
         const personName = document.querySelector('#personName');
-        const display = document.createElement('h2');
-        display.innerHTML = `${personName.value.toUpperCase()} PAYS: $${finalPrice}`;
+        const display = document.createElement('div');
+        const displayName = document.createElement('h2');
+        const deletePerson = document.createElement('button');
+        deletePerson.setAttribute('class', 'deletePerson');
+        deletePerson.innerText = 'Delete';
+        displayName.innerHTML = `${personName.value.toUpperCase()} PAYS: $${finalPrice}`;
         const person = document.createElement('div');
         const list = document.createElement('ul');
         list.setAttribute('class', 'list');
         person.setAttribute('class', 'person');
         display.setAttribute('class', 'displayName');
+        display.append(displayName);
         person.append(display);
         person.append(list);
         people.append(person);
@@ -99,6 +107,11 @@ function calculateData() {
         taxNtip.append(taxDisplay);
         taxNtip.append(tipDisplay);
         person.append(taxNtip);
+        person.append(deletePerson);
+        const removePeople = document.querySelectorAll('.deletePerson');
+        removePeople.forEach(removeButton => {
+            removeButton.addEventListener('click', removePerson);
+        });
     };
     if (tipValue === 0) {
         let finalPrice = Math.round((itemTotals + (itemTotals * taxValue)) * 100) / 100;
