@@ -1,6 +1,6 @@
 //Creates a person div with given name
 //person can be deleted
-//live updates the price that person owes
+//calculates price that person owes
 //for tax, get users input
 
 const evenSplit = document.querySelector('#evenSplit');
@@ -18,90 +18,143 @@ evenSplit?.addEventListener('submit', (event) => {
     }
 })
 
-//user enters a persons name
-const personInput = document.querySelector('#personInput') as HTMLFormElement;
-const people = document.querySelector('.people') as HTMLElement;
+//grabs persons input
+const personInput = document.querySelector('.personInput') as HTMLFormElement;
 
-//selects delete buttons
-const deleteBtn = document.querySelector('delete') as HTMLElement;
-
-//function that removes the person
-function removeParent(this: any){
-    this.parentElement.remove();
+//function that removes stuff
+function removeItem(minusElement :any){
+    minusElement.parentElement.remove();
 }
 
-//user inputs items and price associated with item that the person had
+const items = document.querySelector('.items') as HTMLElement;
 
-const addPerson = () => {
-    const createPerson = document.createElement('div');
-    const displayName = document.createElement('h1');
-    const newItem = document.createElement('button');
-    const remove = document.createElement('button');
-    const personName = document.querySelector('#personName') as HTMLFormElement;
+//adds another item input row
+function addItem(){
 
-    function createItemInput(){
-        const item = document.createElement('div');
-        item.className = 'item'
-    
-        const itemName = document.createElement('input');
-        itemName.type = 'text';
-        itemName.className = 'itemName';
-        itemName.placeholder = 'Item Name';
-    
-        const price = document.createElement('input');
-        price.type = 'number';
-        price.className = 'itemPrice';
-        price.placeholder = 'price';
-    
-        const remove = document.createElement('button');
-    
-        remove.className = 'delete';
-        remove.innerHTML = '&times';
-    
-        remove.addEventListener('click', removeParent);
-    
-        createPerson.append(item);
-        item.append(itemName);
-        item.append(price);
-        item.append(remove);
+    //creates container for items with class item
+    const item = document.createElement('div');
+    item.setAttribute('class', 'item');
 
-        // const items = document.querySelectorAll('.item');
-        //     for(const item of items){
-        //         const itemPrice = item.querySelector('.itemPrice') as HTMLFormElement;
-        //         itemPrice.addEventListener('change', () => {
-        //             console.log(itemPrice.value);
-        //         })
-        //     }
+    //creates the input elements
+    const itemName = document.createElement('input');
+    itemName.setAttribute('type', 'text');
+    itemName.setAttribute('class', 'itemName');
+    itemName.setAttribute('name', 'itemName[]');
+    itemName.setAttribute('placeholder', 'item name');
+    itemName.setAttribute('required', 'true');
+
+    const itemPrice = document.createElement('input');
+    itemPrice.setAttribute('type', 'number');
+    itemPrice.setAttribute('class', 'itemPrice');
+    itemPrice.setAttribute('name', 'itemPrice[]');
+    itemPrice.setAttribute('placeholder', 'item price');
+    itemPrice.setAttribute('step', '0.01');
+    itemPrice.setAttribute('min', '0');
+    itemPrice.setAttribute('required', 'true');
+
+    //creates the minus span element
+    const minus = document.createElement('span');
+    minus.setAttribute('onclick', 'removeItem(this)');
+    const minusText = document.createTextNode("-");
+    minus.append(minusText);
+
+    //creates the plus span element
+    const plus = document.createElement('span');
+    plus.setAttribute('onclick', 'addItem(this)');
+    const plusText = document.createTextNode("+");
+    plus.append(plusText);
+
+    //appends to item div
+    item.append(itemName);
+    item.append(itemPrice);
+    item.append(minus);
+    item.append(plus);
+
+    //appends item div to items div
+    items.append(item);
+}
+
+//resets the item rows back to 1 after submission
+function resetFields(){
+    let itemFields = document.querySelectorAll('.item');
+    itemFields.forEach(function(element, index){
+        if(index > 0){
+            element.remove();
+        }
+    })
+}
+
+//calculates total for people
+function calculateData(){
+    let itemPrices = personInput.querySelectorAll('.itemPrice');
+    let itemNames = personInput.querySelectorAll('.itemName');
+    let taxInput = personInput.querySelector('#tax') as HTMLInputElement;
+    let tipInput = personInput.querySelector('#tip') as HTMLInputElement;
+    let itemTotals: number = 0;
+    itemPrices.forEach(price => {
+        itemTotals += parseFloat((price as HTMLInputElement).value);
+    })
+    let taxValue = parseFloat(taxInput.value) / 100;
+    let tipValue = parseInt(tipInput.value) / 100;
+
+        //appends submitted inputs to person element
+        let appendPerson = (finalPrice: any) => {
         
-        //get a list of the input elements with class name itemPrice, 
-        //whose parent element is the div with class name item
-        //and which are located inside a div container with class name person
+        //grabs people element that we append to
+        const people = document.querySelector('.people') as HTMLElement;
+        const personName = document.querySelector('#personName') as HTMLInputElement;
+        const display = document.createElement('h2');
+        display.innerHTML = `${personName.value.toUpperCase()} PAYS: $${finalPrice}`;
+        const person = document.createElement('div');
+        const list = document.createElement('ul');
+        list.setAttribute('class', 'list');
         
-    }
+        person.setAttribute('class', 'person');
+        display.setAttribute('class', 'displayName');
 
-    if(personName.value){
-        createPerson.className = 'person';
-        displayName.innerHTML = personName.value;
-        newItem.className = 'add';
-        newItem.innerHTML = 'add item';
-        remove.className = 'delete';
-        remove.innerHTML = '&times';
+        person.append(display);
+        person.append(list);
+        people.append(person);
 
-        people.append(createPerson);
-        createPerson.append(displayName);
-        createPerson.append(remove);
-        createPerson.append(newItem);
-
-        newItem.addEventListener('click', createItemInput);
-        remove.addEventListener('click', removeParent);
+            for(let i = 0; i < itemNames.length; i++){
+                const listItem = document.createElement('li');
+                let itemName = itemNames[i];
+                let itemPrice = itemPrices[i];
+                
+                listItem.innerHTML = `${(itemName as HTMLInputElement).value}: ${(itemPrice as HTMLInputElement).value}`;
+                list.append(listItem);
+            }
         
+        const taxNtip = document.createElement('div');
+        taxNtip.setAttribute('class', 'taxNtip');
+
+        const taxDisplay = document.createElement('p');
+        taxDisplay.setAttribute('class', 'taxDisplay');
+        taxDisplay.innerHTML = `Tax: $${(itemTotals * taxValue).toFixed(2)}`;
+
+        const tipDisplay = document.createElement('p');
+        tipDisplay.setAttribute('class', 'tipDisplay');
+        tipDisplay.innerHTML = `Tip: $${(tipValue * (itemTotals + (itemTotals * taxValue))).toFixed(2)}`;
+        
+        taxNtip.append(taxDisplay);
+        taxNtip.append(tipDisplay);
+        person.append(taxNtip);
+        }
+
+    if(tipValue === 0){
+        let finalPrice = Math.round((itemTotals + (itemTotals * taxValue)) * 100) / 100;
+        appendPerson(finalPrice);
     } else {
-        alert('Please enter a name');
+        let finalPrice = (Math.round((tipValue * (itemTotals + (itemTotals * taxValue))) * 100) / 100
+                       + Math.round((itemTotals + (itemTotals * taxValue)) * 100) / 100).toFixed(2);
+        appendPerson(finalPrice);
     }
 }
 
+//run functions on form submit
 personInput?.addEventListener('submit', (event) => {
     event.preventDefault();
-    addPerson();
+    calculateData();
+    resetFields();
     personInput.reset();
 });

@@ -5,29 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Split</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
 </head>
 <body>
-    <h1>Bill Splitter</h1>
-    <h2>Wanna split something evenly?</h2>
-    <form action="" id="evenSplit">
-        <label for="total">Total</label>
-        <input id="total" name="total" type="number" placeholder="$" min="0" step="0.01" required>
 
-        <label for="people">Number of People</label>
-        <input id="people" name="people" type="number" placeholder="#" min="0" step="0.01" required>
+    <main>
+        <h1>S P L I T</h1>
+        <h2>Wanna split something evenly?</h2>
+        <form action="" id="evenSplit">
+            <label for="total">Total</label>
+            <input id="total" name="total" type="number" placeholder="$" min="0" step="0.01" required>
 
-        <button>SUBMIT</button>
-    </form>
-    <h2>Each person pays: <span id="displayResult">0</span></h2>
+            <label for="people">Number of People</label>
+            <input id="people" name="people" type="number" placeholder="#" min="0" step="0.01" required>
 
-    <h2>Splitting based on what people ordered?</h2>
-    <form action="" id="personInput">
-        <label for="personName">Person's name</label>
-        <input type="text" id="personName" name="name" placeholder="name" required>
-        <button>Add Person</button>
-    </form>
+            <button>Calculate</button>
+        </form>
+        <h2>Each person pays: <span id="displayResult">0</span></h2>
 
-    <div class="people"></div>
+        <h2>Splitting based on what people ordered?</h2>
+        <form action="" class="personInput">
+            <label for="personName">Person's name</label>
+            <input type="text" id="personName" name="name" placeholder="name" required>
+            <div class="items">
+                <div class="item">
+                    <input type="text" class="itemName" name="itemName[]" placeholder="item name" required>
+                    <input type="number" class="itemPrice" name="itemPrice[]" placeholder="item price" step="0.01" min="0" required>
+                    <span onclick="removeItem(this)">-</span>
+                    <span onclick="addItem(this)">+</span>
+                </div>
+            </div>
+            <p>Wanna include tax or tip or both?</p>
+            <div class="taxInput">
+                <label for="tax">Enter the tax percentage(ex. 8.875)</label>
+                <input type="number" id="tax" name="tax" value="0" step="0.001" min="0">
+            </div>
+            <div class="tipInput">
+                <label for="tip">Enter the tip percentage</label>
+                <input type="number" id="tip" name="tip" value="0" min="0">
+            </div>
+            <button>Calculate</button>
+        </form>
+
+        <div class="people"></div>
+
+        <div class="footer">
+            <p class="footnote">&copy;Made By Jason Chen 2022</p>
+        </div>
+    </main>
 
     <script src="dist/index.js"></script>
 </body>
